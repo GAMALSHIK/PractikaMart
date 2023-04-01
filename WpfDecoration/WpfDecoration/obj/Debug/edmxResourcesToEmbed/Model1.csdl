@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DecorationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="заказ_клиента">
+    <Key>
+      <PropertyRef Name="id_заказа_клиента" />
+    </Key>
+    <Property Name="id_заказа_клиента" Type="Int32" Nullable="false" />
+    <Property Name="дата_заказа" Type="DateTime" Precision="3" />
+    <Property Name="дата_доставки" Type="DateTime" Precision="3" />
+    <Property Name="id_пункт_выдачи" Type="Int32" />
+    <Property Name="id_клиента" Type="Int32" />
+    <Property Name="код_получения" Type="Int32" />
+    <Property Name="id_статус_заказа" Type="Int32" />
+    <NavigationProperty Name="пункты_выдачи" Relationship="Self.FK_заказ_клиента_пункты_выдачи" FromRole="заказ_клиента" ToRole="пункты_выдачи" />
+    <NavigationProperty Name="состав_заказа_клиента" Relationship="Self.FK_состав_заказа_клиента_заказ_клиента" FromRole="заказ_клиента" ToRole="состав_заказа_клиента" />
+    <NavigationProperty Name="пользователи" Relationship="DecorationModel.FK_заказ_клиента_пользователи" FromRole="заказ_клиента" ToRole="пользователи" />
+  </EntityType>
+  <EntityType Name="категория_товара">
+    <Key>
+      <PropertyRef Name="id_категории_товара" />
+    </Key>
+    <Property Name="id_категории_товара" Type="Int32" Nullable="false" />
+    <Property Name="наименование" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="продукция" Relationship="Self.FK_продукция_категория_товара" FromRole="категория_товара" ToRole="продукция" />
+  </EntityType>
+  <EntityType Name="пользователи">
+    <Key>
+      <PropertyRef Name="id_пользователя" />
+    </Key>
+    <Property Name="id_пользователя" Type="Int32" Nullable="false" />
+    <Property Name="фио" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="логин" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="пароль" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="id_роли" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="роли_пользоваетелей" Relationship="Self.FK_пользователи_роли_пользоваетелей" FromRole="пользователи" ToRole="роли_пользоваетелей" />
+    <NavigationProperty Name="заказ_клиента" Relationship="DecorationModel.FK_заказ_клиента_пользователи" FromRole="пользователи" ToRole="заказ_клиента" />
+  </EntityType>
+  <EntityType Name="продукция">
+    <Key>
+      <PropertyRef Name="id_продукции" />
+    </Key>
+    <Property Name="id_продукции" Type="Int32" Nullable="false" />
+    <Property Name="артикул" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="наименование" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="еденица_измерения" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="стоимость" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="размер_максимально_возможной_скидки" Type="Int32" />
+    <Property Name="производитель" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="поставщик" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_категория_товара" Type="Int32" />
+    <Property Name="действующая_скидка" Type="Int32" />
+    <Property Name="количество_на_складе" Type="Int32" />
+    <Property Name="описание" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="изображение" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="категория_товара" Relationship="Self.FK_продукция_категория_товара" FromRole="продукция" ToRole="категория_товара" />
+    <NavigationProperty Name="состав_заказа_клиента" Relationship="Self.FK_состав_заказа_клиента_продукция" FromRole="продукция" ToRole="состав_заказа_клиента" />
+  </EntityType>
+  <EntityType Name="пункты_выдачи">
+    <Key>
+      <PropertyRef Name="id_пункта_выдачи" />
+    </Key>
+    <Property Name="id_пункта_выдачи" Type="Int32" Nullable="false" />
+    <Property Name="адрес" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="заказ_клиента" Relationship="Self.FK_заказ_клиента_пункты_выдачи" FromRole="пункты_выдачи" ToRole="заказ_клиента" />
+  </EntityType>
+  <EntityType Name="роли_пользоваетелей">
+    <Key>
+      <PropertyRef Name="id_роли" />
+    </Key>
+    <Property Name="id_роли" Type="Int32" Nullable="false" />
+    <Property Name="наименование" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="пользователи" Relationship="Self.FK_пользователи_роли_пользоваетелей" FromRole="роли_пользоваетелей" ToRole="пользователи" />
+  </EntityType>
+  <EntityType Name="состав_заказа_клиента">
+    <Key>
+      <PropertyRef Name="id_состава_заказа" />
+    </Key>
+    <Property Name="id_состава_заказа" Type="Int32" Nullable="false" />
+    <Property Name="id_продукции" Type="Int32" Nullable="false" />
+    <Property Name="id_заказа_клиента" Type="Int32" Nullable="false" />
+    <Property Name="количество" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="заказ_клиента" Relationship="Self.FK_состав_заказа_клиента_заказ_клиента" FromRole="состав_заказа_клиента" ToRole="заказ_клиента" />
+    <NavigationProperty Name="продукция" Relationship="Self.FK_состав_заказа_клиента_продукция" FromRole="состав_заказа_клиента" ToRole="продукция" />
+  </EntityType>
+  <EntityType Name="статус_заказа">
+    <Key>
+      <PropertyRef Name="id_статуса_заказа" />
+    </Key>
+    <Property Name="id_статуса_заказа" Type="Int32" Nullable="false" />
+    <Property Name="наименование" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_заказ_клиента_пункты_выдачи">
+    <End Role="пункты_выдачи" Type="Self.пункты_выдачи" Multiplicity="0..1" />
+    <End Role="заказ_клиента" Type="Self.заказ_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="пункты_выдачи">
+        <PropertyRef Name="id_пункта_выдачи" />
+      </Principal>
+      <Dependent Role="заказ_клиента">
+        <PropertyRef Name="id_пункт_выдачи" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_состав_заказа_клиента_заказ_клиента">
+    <End Role="заказ_клиента" Type="Self.заказ_клиента" Multiplicity="1" />
+    <End Role="состав_заказа_клиента" Type="Self.состав_заказа_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="заказ_клиента">
+        <PropertyRef Name="id_заказа_клиента" />
+      </Principal>
+      <Dependent Role="состав_заказа_клиента">
+        <PropertyRef Name="id_заказа_клиента" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_продукция_категория_товара">
+    <End Role="категория_товара" Type="Self.категория_товара" Multiplicity="0..1" />
+    <End Role="продукция" Type="Self.продукция" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="категория_товара">
+        <PropertyRef Name="id_категории_товара" />
+      </Principal>
+      <Dependent Role="продукция">
+        <PropertyRef Name="id_категория_товара" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_пользователи_роли_пользоваетелей">
+    <End Role="роли_пользоваетелей" Type="Self.роли_пользоваетелей" Multiplicity="1" />
+    <End Role="пользователи" Type="Self.пользователи" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="роли_пользоваетелей">
+        <PropertyRef Name="id_роли" />
+      </Principal>
+      <Dependent Role="пользователи">
+        <PropertyRef Name="id_роли" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_состав_заказа_клиента_продукция">
+    <End Role="продукция" Type="Self.продукция" Multiplicity="1" />
+    <End Role="состав_заказа_клиента" Type="Self.состав_заказа_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="продукция">
+        <PropertyRef Name="id_продукции" />
+      </Principal>
+      <Dependent Role="состав_заказа_клиента">
+        <PropertyRef Name="id_продукции" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DecorationEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="заказ_клиента" EntityType="Self.заказ_клиента" />
+    <EntitySet Name="категория_товара" EntityType="Self.категория_товара" />
+    <EntitySet Name="пользователи" EntityType="Self.пользователи" />
+    <EntitySet Name="продукция" EntityType="Self.продукция" />
+    <EntitySet Name="пункты_выдачи" EntityType="Self.пункты_выдачи" />
+    <EntitySet Name="роли_пользоваетелей" EntityType="Self.роли_пользоваетелей" />
+    <EntitySet Name="состав_заказа_клиента" EntityType="Self.состав_заказа_клиента" />
+    <EntitySet Name="статус_заказа" EntityType="Self.статус_заказа" />
+    <AssociationSet Name="FK_заказ_клиента_пункты_выдачи" Association="Self.FK_заказ_клиента_пункты_выдачи">
+      <End Role="пункты_выдачи" EntitySet="пункты_выдачи" />
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_состав_заказа_клиента_заказ_клиента" Association="Self.FK_состав_заказа_клиента_заказ_клиента">
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+      <End Role="состав_заказа_клиента" EntitySet="состав_заказа_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_продукция_категория_товара" Association="Self.FK_продукция_категория_товара">
+      <End Role="категория_товара" EntitySet="категория_товара" />
+      <End Role="продукция" EntitySet="продукция" />
+    </AssociationSet>
+    <AssociationSet Name="FK_пользователи_роли_пользоваетелей" Association="Self.FK_пользователи_роли_пользоваетелей">
+      <End Role="роли_пользоваетелей" EntitySet="роли_пользоваетелей" />
+      <End Role="пользователи" EntitySet="пользователи" />
+    </AssociationSet>
+    <AssociationSet Name="FK_состав_заказа_клиента_продукция" Association="Self.FK_состав_заказа_клиента_продукция">
+      <End Role="продукция" EntitySet="продукция" />
+      <End Role="состав_заказа_клиента" EntitySet="состав_заказа_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_заказ_клиента_пользователи" Association="DecorationModel.FK_заказ_клиента_пользователи">
+      <End Role="пользователи" EntitySet="пользователи" />
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_заказ_клиента_пользователи">
+    <End Type="DecorationModel.пользователи" Role="пользователи" Multiplicity="0..1" />
+    <End Type="DecorationModel.заказ_клиента" Role="заказ_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="пользователи">
+        <PropertyRef Name="id_пользователя" />
+      </Principal>
+      <Dependent Role="заказ_клиента">
+        <PropertyRef Name="id_клиента" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

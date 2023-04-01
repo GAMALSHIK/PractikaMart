@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище DecorationModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="заказ_клиента">
+    <Key>
+      <PropertyRef Name="id_заказа_клиента" />
+    </Key>
+    <Property Name="id_заказа_клиента" Type="int" Nullable="false" />
+    <Property Name="дата_заказа" Type="datetime" />
+    <Property Name="дата_доставки" Type="datetime" />
+    <Property Name="id_пункт_выдачи" Type="int" />
+    <Property Name="id_клиента" Type="int" />
+    <Property Name="код_получения" Type="int" />
+    <Property Name="id_статус_заказа" Type="int" />
+  </EntityType>
+  <EntityType Name="категория_товара">
+    <Key>
+      <PropertyRef Name="id_категории_товара" />
+    </Key>
+    <Property Name="id_категории_товара" Type="int" Nullable="false" />
+    <Property Name="наименование" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="пользователи">
+    <Key>
+      <PropertyRef Name="id_пользователя" />
+    </Key>
+    <Property Name="id_пользователя" Type="int" Nullable="false" />
+    <Property Name="фио" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="логин" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="пароль" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="id_роли" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="продукция">
+    <Key>
+      <PropertyRef Name="id_продукции" />
+    </Key>
+    <Property Name="id_продукции" Type="int" Nullable="false" />
+    <Property Name="артикул" Type="nvarchar" MaxLength="50" />
+    <Property Name="наименование" Type="nvarchar" MaxLength="50" />
+    <Property Name="еденица_измерения" Type="nvarchar" MaxLength="50" />
+    <Property Name="стоимость" Type="money" />
+    <Property Name="размер_максимально_возможной_скидки" Type="int" />
+    <Property Name="производитель" Type="nvarchar" MaxLength="50" />
+    <Property Name="поставщик" Type="nvarchar" MaxLength="50" />
+    <Property Name="id_категория_товара" Type="int" />
+    <Property Name="действующая_скидка" Type="int" />
+    <Property Name="количество_на_складе" Type="int" />
+    <Property Name="описание" Type="nvarchar" MaxLength="50" />
+    <Property Name="изображение" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="пункты_выдачи">
+    <Key>
+      <PropertyRef Name="id_пункта_выдачи" />
+    </Key>
+    <Property Name="id_пункта_выдачи" Type="int" Nullable="false" />
+    <Property Name="адрес" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="роли_пользоваетелей">
+    <Key>
+      <PropertyRef Name="id_роли" />
+    </Key>
+    <Property Name="id_роли" Type="int" Nullable="false" />
+    <Property Name="наименование" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="состав_заказа_клиента">
+    <Key>
+      <PropertyRef Name="id_состава_заказа" />
+    </Key>
+    <Property Name="id_состава_заказа" Type="int" Nullable="false" />
+    <Property Name="id_продукции" Type="int" Nullable="false" />
+    <Property Name="id_заказа_клиента" Type="int" Nullable="false" />
+    <Property Name="количество" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="статус_заказа">
+    <Key>
+      <PropertyRef Name="id_статуса_заказа" />
+    </Key>
+    <Property Name="id_статуса_заказа" Type="int" Nullable="false" />
+    <Property Name="наименование" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_заказ_клиента_пользователи">
+    <End Role="пользователи" Type="Self.пользователи" Multiplicity="0..1" />
+    <End Role="заказ_клиента" Type="Self.заказ_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="пользователи">
+        <PropertyRef Name="id_пользователя" />
+      </Principal>
+      <Dependent Role="заказ_клиента">
+        <PropertyRef Name="id_клиента" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_заказ_клиента_пункты_выдачи">
+    <End Role="пункты_выдачи" Type="Self.пункты_выдачи" Multiplicity="0..1" />
+    <End Role="заказ_клиента" Type="Self.заказ_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="пункты_выдачи">
+        <PropertyRef Name="id_пункта_выдачи" />
+      </Principal>
+      <Dependent Role="заказ_клиента">
+        <PropertyRef Name="id_пункт_выдачи" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_пользователи_роли_пользоваетелей">
+    <End Role="роли_пользоваетелей" Type="Self.роли_пользоваетелей" Multiplicity="1" />
+    <End Role="пользователи" Type="Self.пользователи" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="роли_пользоваетелей">
+        <PropertyRef Name="id_роли" />
+      </Principal>
+      <Dependent Role="пользователи">
+        <PropertyRef Name="id_роли" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_продукция_категория_товара">
+    <End Role="категория_товара" Type="Self.категория_товара" Multiplicity="0..1" />
+    <End Role="продукция" Type="Self.продукция" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="категория_товара">
+        <PropertyRef Name="id_категории_товара" />
+      </Principal>
+      <Dependent Role="продукция">
+        <PropertyRef Name="id_категория_товара" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_состав_заказа_клиента_заказ_клиента">
+    <End Role="заказ_клиента" Type="Self.заказ_клиента" Multiplicity="1" />
+    <End Role="состав_заказа_клиента" Type="Self.состав_заказа_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="заказ_клиента">
+        <PropertyRef Name="id_заказа_клиента" />
+      </Principal>
+      <Dependent Role="состав_заказа_клиента">
+        <PropertyRef Name="id_заказа_клиента" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_состав_заказа_клиента_продукция">
+    <End Role="продукция" Type="Self.продукция" Multiplicity="1" />
+    <End Role="состав_заказа_клиента" Type="Self.состав_заказа_клиента" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="продукция">
+        <PropertyRef Name="id_продукции" />
+      </Principal>
+      <Dependent Role="состав_заказа_клиента">
+        <PropertyRef Name="id_продукции" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище DecorationModelContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="заказ_клиента" EntityType="Self.заказ_клиента" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="категория_товара" EntityType="Self.категория_товара" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="пользователи" EntityType="Self.пользователи" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="продукция" EntityType="Self.продукция" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="пункты_выдачи" EntityType="Self.пункты_выдачи" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="роли_пользоваетелей" EntityType="Self.роли_пользоваетелей" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="состав_заказа_клиента" EntityType="Self.состав_заказа_клиента" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="статус_заказа" EntityType="Self.статус_заказа" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_заказ_клиента_пользователи" Association="Self.FK_заказ_клиента_пользователи">
+      <End Role="пользователи" EntitySet="пользователи" />
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_заказ_клиента_пункты_выдачи" Association="Self.FK_заказ_клиента_пункты_выдачи">
+      <End Role="пункты_выдачи" EntitySet="пункты_выдачи" />
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_пользователи_роли_пользоваетелей" Association="Self.FK_пользователи_роли_пользоваетелей">
+      <End Role="роли_пользоваетелей" EntitySet="роли_пользоваетелей" />
+      <End Role="пользователи" EntitySet="пользователи" />
+    </AssociationSet>
+    <AssociationSet Name="FK_продукция_категория_товара" Association="Self.FK_продукция_категория_товара">
+      <End Role="категория_товара" EntitySet="категория_товара" />
+      <End Role="продукция" EntitySet="продукция" />
+    </AssociationSet>
+    <AssociationSet Name="FK_состав_заказа_клиента_заказ_клиента" Association="Self.FK_состав_заказа_клиента_заказ_клиента">
+      <End Role="заказ_клиента" EntitySet="заказ_клиента" />
+      <End Role="состав_заказа_клиента" EntitySet="состав_заказа_клиента" />
+    </AssociationSet>
+    <AssociationSet Name="FK_состав_заказа_клиента_продукция" Association="Self.FK_состав_заказа_клиента_продукция">
+      <End Role="продукция" EntitySet="продукция" />
+      <End Role="состав_заказа_клиента" EntitySet="состав_заказа_клиента" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
